@@ -3,26 +3,13 @@
   "phases": {
     "install": {
       "commands": [
-        "echo Check versions",
-        "npm -v",
-        "docker --version",
-        "mvn -version",
-
-        "echo Install cdk",
-        "npm install -g aws-cdk",
-        "cdk --version",
-
-        "echo Install native-image",
         "mkdir graalvm",
         "curl -L https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.2.0/graalvm-ce-java11-linux-amd64-20.2.0.tar.gz | tar -zxv -C graalvm --strip-components=1",
         "export PATH=graalvm/bin:$PATH",
         "export JAVA_HOME=graalvm",
-        "java -version",
         "export PATH=graalvm/lib/installer/bin:$PATH",
-        "gu --version",
         "gu install native-image",
-        "export PATH=graalvm/lib/svm/bin:$PATH",
-        "native-image --version"
+        "export PATH=graalvm/lib/svm/bin:$PATH"
       ]
     },
     "build": {
