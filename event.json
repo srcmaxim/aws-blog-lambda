@@ -1,0 +1,48 @@
+{
+  "version": "2.0",
+  "routeKey": "GET /posts/{id}",
+  "rawPath": "/dev/posts/graalvm-python",
+  "rawQueryString": "",
+  "cookies": [
+    "s_pers=%20s_vnum%3D1598268840708%2526vn%253D1%7C1598268840708%3B%20s_invisit%3Dtrue%7C1595678653169%3B%20s_nr%3D1595676853174-New%7C1603452853174%3B"
+  ],
+  "headers": {
+    "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+    "accept-encoding": "gzip, deflate, br",
+    "accept-language": "en-US,en;q=0.9",
+    "content-length": "0",
+    "host": "7lra7r1o0i.execute-api.eu-west-1.amazonaws.com",
+    "sec-fetch-dest": "document",
+    "sec-fetch-mode": "navigate",
+    "sec-fetch-site": "none",
+    "sec-fetch-user": "?1",
+    "upgrade-insecure-requests": "1",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36",
+    "x-amzn-trace-id": "Root=1-5f4767ac-3ccde7cabf55cadbdaab335a",
+    "x-forwarded-for": "37.57.69.132",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https"
+  },
+  "requestContext": {
+    "accountId": "813315352955",
+    "apiId": "7lra7r1o0i",
+    "domainName": "7lra7r1o0i.execute-api.eu-west-1.amazonaws.com",
+    "domainPrefix": "7lra7r1o0i",
+    "http": {
+      "method": "GET",
+      "path": "/dev/posts/graalvm-python",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "37.57.69.132",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.135 Safari/537.36"
+    },
+    "requestId": "R60i5gfzjoEEPcQ=",
+    "routeKey": "GET /posts/{id}",
+    "stage": "dev",
+    "time": "27/Aug/2020:07:58:36 +0000",
+    "timeEpoch": 1598515116085
+  },
+  "pathParameters": {
+    "id": "graalvm-python"
+  },
+  "isBase64Encoded": false
+}

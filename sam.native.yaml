@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless Quarkus - blog-1.0-SNAPSHOT
+Globals:
+  Api:
+    BinaryMediaTypes:
+      - "*/*"
+
+Resources:
+  PostNative:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: not.used.in.provided.runtime
+      Runtime: provided
+      CodeUri: target/function.zip
+      MemorySize: 128
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AmazonDynamoDBFullAccess
+      Timeout: 15
+      Environment:
+        Variables:
+          DISABLE_SIGNAL_HANDLERS: true
+          QUARKUS_DYNAMODB_AWS_REGION: eu-west-1
+          QUARKUS_DYNAMODB_ENDPOINT_OVERRIDE: http://localhost:8080
+          QUARKUS_DYNAMODB_AWS_CREDENTIALS_TYPE: static
+          QUARKUS_DYNAMODB_AWS_CREDENTIALS_STATIC-PROVIDER_ACCESS-KEY-ID: access_key_id
+          QUARKUS_DYNAMODB_AWS_CREDENTIALS_STATIC-PROVIDER_SECRET-ACCESS-KEY: secret_access_key
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path:
+              - /posts
+              - /posts/{id}
+            Method:
+              - get
+              - post
+              - put
+              - delete

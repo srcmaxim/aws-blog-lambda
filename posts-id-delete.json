@@ -1,0 +1,40 @@
+{
+  "version": "2.0",
+  "routeKey": "DELETE /posts/{id}",
+  "rawPath": "/dev/posts/graalvm-python",
+  "rawQueryString": "",
+  "headers": {
+    "accept": "*/*",
+    "accept-encoding": "gzip, deflate, br",
+    "content-length": "0",
+    "host": "7lra7r1o0i.execute-api.eu-west-1.amazonaws.com",
+    "postman-token": "427d320b-20f0-49dd-ac80-fe6949e13927",
+    "user-agent": "PostmanRuntime/7.26.3",
+    "x-amzn-trace-id": "Root=1-5f47c11e-d70102146aff5c8320e73918",
+    "x-forwarded-for": "37.57.69.132",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https"
+  },
+  "requestContext": {
+    "accountId": "813315352955",
+    "apiId": "7lra7r1o0i",
+    "domainName": "7lra7r1o0i.execute-api.eu-west-1.amazonaws.com",
+    "domainPrefix": "7lra7r1o0i",
+    "http": {
+      "method": "DELETE",
+      "path": "/dev/posts/graalvm-python",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "37.57.69.132",
+      "userAgent": "PostmanRuntime/7.26.3"
+    },
+    "requestId": "R7scyg4KjoEEPRw=",
+    "routeKey": "DELETE /posts/{id}",
+    "stage": "dev",
+    "time": "27/Aug/2020:14:20:14 +0000",
+    "timeEpoch": 1598538014544
+  },
+  "pathParameters": {
+    "id": "graalvm-python"
+  },
+  "isBase64Encoded": false
+}

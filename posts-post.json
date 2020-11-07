@@ -1,0 +1,39 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /posts",
+  "rawPath": "/dev/posts",
+  "rawQueryString": "",
+  "headers": {
+    "accept": "*/*",
+    "accept-encoding": "gzip, deflate, br",
+    "content-length": "241",
+    "content-type": "application/json",
+    "host": "7lra7r1o0i.execute-api.eu-west-1.amazonaws.com",
+    "postman-token": "1f310285-76de-459a-8dfa-f4f2a7ccba57",
+    "user-agent": "PostmanRuntime/7.26.3",
+    "x-amzn-trace-id": "Root=1-5f47c3c7-6a1639bcf236e16efb05ce56",
+    "x-forwarded-for": "37.57.69.132",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https"
+  },
+  "requestContext": {
+    "accountId": "813315352955",
+    "apiId": "7lra7r1o0i",
+    "domainName": "7lra7r1o0i.execute-api.eu-west-1.amazonaws.com",
+    "domainPrefix": "7lra7r1o0i",
+    "http": {
+      "method": "POST",
+      "path": "/dev/posts",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "37.57.69.132",
+      "userAgent": "PostmanRuntime/7.26.3"
+    },
+    "requestId": "R7uHPgi_DoEEJmA=",
+    "routeKey": "POST /posts",
+    "stage": "dev",
+    "time": "27/Aug/2020:14:31:35 +0000",
+    "timeEpoch": 1598538695828
+  },
+  "body": "{ \"id\": \"graalvm-python\", \"title\": \"My Qurkus Python Title\", \"content\": \"https://{bucket}/graalvm-python\", \"readMinutes\": 3, \"publishDate\": \"2020-08-20\", \"tags\": [ \"GraalVM\", \"Python\" ], \"messages\": [ { \"createdAt\": \"2\", \"message\": \"Hello\", \"userEmail\": \"hello@example.com\" } ] }",
+  "isBase64Encoded": false
+}
