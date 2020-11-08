@@ -1,0 +1,20 @@
+version: 0.2
+  phases:
+    install:
+      commands:
+        - mkdir graalvm
+        - curl -L https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.2.0/graalvm-ce-java11-linux-amd64-20.2.0.tar.gz | tar -zxv -C graalvm --strip-components=1
+        - export PATH=graalvm/bin:$PATH
+        - export JAVA_HOME=graalvm
+        - export PATH=graalvm/lib/installer/bin:$PATH
+        - gu install native-image
+        - export PATH=graalvm/lib/svm/bin:$PATH
+    build:
+      commands:
+        - mvn clean install -Dquarkus.package.type=native -Dmaven.test.skip=true
+    post_build:
+      commands:
+        - mv target/function.zip blog-function.zip
+artifacts:
+  files:
+    - blog-function.zip

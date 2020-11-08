@@ -14,7 +14,7 @@
     },
     "build": {
       "commands": [
-        "mvn clean install -Dquarkus.package.type=native",
+        "mvn clean install -Dquarkus.package.type=native -Dmaven.test.skip=true",
         "mv target/function.zip blog-function.zip"
       ]
     }
