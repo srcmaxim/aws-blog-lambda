@@ -15,8 +15,7 @@
     "build": {
       "commands": [
         "mvn clean install -Dquarkus.package.type=native -Dmaven.test.skip=true",
-        "mv target/function.zip blog-function.zip",
-        "aws s3 cp blog-function.zip s3://blog-function/blog-function.zip"
+        "mv target/function.zip blog-function.zip"
       ]
     }
   },
