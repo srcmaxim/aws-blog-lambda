@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: AWS Serverless Quarkus - blog-1.0-SNAPSHOT
+Description: AWS Serverless Quarkus
 Globals:
   Api:
     BinaryMediaTypes:
@@ -26,15 +26,3 @@ Resources:
           QUARKUS_DYNAMODB_AWS_CREDENTIALS_TYPE: static
           QUARKUS_DYNAMODB_AWS_CREDENTIALS_STATIC-PROVIDER_ACCESS-KEY-ID: access_key_id
           QUARKUS_DYNAMODB_AWS_CREDENTIALS_STATIC-PROVIDER_SECRET-ACCESS-KEY: secret_access_key
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path:
-              - /posts
-              - /posts/{id}
-            Method:
-              - get
-              - post
-              - put
-              - delete
