@@ -34,6 +34,6 @@
     "time": "27/Aug/2020:14:31:35 +0000",
     "timeEpoch": 1598538695828
   },
-  "body": "{ \"id\": \"graalvm-python\", \"title\": \"My Qurkus Python Title\", \"content\": \"https://{bucket}/graalvm-python\", \"readMinutes\": 3, \"publishDate\": \"2020-08-20\", \"tags\": [ \"GraalVM\", \"Python\" ], \"messages\": [ { \"createdAt\": \"2\", \"message\": \"Hello\", \"userEmail\": \"hello@example.com\" } ] }",
+  "body": "{ \"id\": \"graalvm-python\", \"title\": \"My Qurkus Python Title\", \"content\": \"https://{bucket}/graalvm-python\", \"readMinutes\": 3, \"publishDate\": \"2020-08-20\", \"tags\": [ \"GraalVM\", \"Python\" ], \"messages\": [ { \"createdAt\": \"2020-08-20\", \"message\": \"Hello\", \"userEmail\": \"hello@example.com\" } ] }",
   "isBase64Encoded": false
 }

@@ -37,6 +37,6 @@
   "pathParameters": {
     "id": "graalvm-python"
   },
-  "body": "{ \"id\": \"graalvm-python\", \"title\": \"My Qurkus Python Title\", \"content\": \"https://{bucket}/graalvm-python\", \"readMinutes\": 3, \"publishDate\": \"2020-08-20\", \"tags\": [ \"GraalVM\", \"Python\" ] }",
+  "body": "{ \"id\": \"graalvm-python\", \"title\": \"My Qurkus Python Title\", \"content\": \"https://{bucket}/graalvm-python\", \"readMinutes\": 3, \"publishDate\": \"2020-08-20\", \"tags\": [ \"GraalVM\", \"Python\" ], \"messages\": [ { \"createdAt\": \"2020-08-20\", \"message\": \"Hello\", \"userEmail\": \"hello@example.com\" } ] }",
   "isBase64Encoded": false
 }
