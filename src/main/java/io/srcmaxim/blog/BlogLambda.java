@@ -4,7 +4,7 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.srcmaxim.blog.model.Post;
 import io.srcmaxim.blog.model.PostMeta;
 import io.srcmaxim.blog.service.BlogService;
@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-;
-
 @Named("blog")
 public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse> {
 
@@ -27,11 +25,18 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     BlogService blogService;
 
     @Inject
-    Gson gson;
+    ObjectMapper objectMapper;
 
     @Override
     public APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent req, Context context) {
+        try {
+            return handleRequest(req);
+        } catch (Exception e) {
+            return handleError(e);
+        }
+    }
 
+    private APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent req) throws Exception {
         String routeKey = req.getRouteKey();
         switch (routeKey) {
             case "GET /posts": {
@@ -61,10 +66,10 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
             }
             case "PUT /posts/{id}":
             case "POST /posts": {
-                Post post = gson.fromJson(req.getBody(), Post.class);
+                Post post = objectMapper.readValue(req.getBody(), Post.class);
                 post.id = Optional.ofNullable(req.getPathParameters())
                         .map(pathParameters -> pathParameters.get("id"))
-                        .orElse(post.title.replace(' ', '-').toLowerCase());
+                        .orElse(post.id);
                 blogService.putPost(post);
                 return noContentCreated(post.id);
             }
@@ -76,7 +81,15 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
         return APIGatewayV2HTTPResponse.builder()
                 .withHeaders(Map.of("Content-Type", "application/json"))
                 .withStatusCode(200)
-                .withBody(gson.toJson(data))
+                .withBody(toJson(data))
+                .build();
+    }
+
+    private APIGatewayV2HTTPResponse handleError(Exception exception) {
+        return APIGatewayV2HTTPResponse.builder()
+                .withHeaders(Map.of("Content-Type", "application/json"))
+                .withStatusCode(500)
+                .withBody(toJson(exception.getMessage()))
                 .build();
     }
 
@@ -104,5 +117,13 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
                 .build();
     }
 
+    private String toJson(Object data) {
+        try {
+            return objectMapper.writeValueAsString(data);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            return null;
+        }
+    }
 
 }

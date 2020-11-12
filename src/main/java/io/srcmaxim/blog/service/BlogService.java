@@ -16,6 +16,9 @@ public class BlogService {
     DynamoDbRepository dynamoDbRepository;
 
     public void putPost(Post post) {
+        if (post.id == null) {
+            post.id = post.title.replace(' ', '-').toLowerCase();
+        }
         dynamoDbRepository.putPost(post);
     }
 

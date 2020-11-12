@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "routeKey": "POST /posts",
-  "rawPath": "/Dev/posts",
+  "rawPath": "/dev/posts",
   "rawQueryString": "",
   "headers": {
     "accept": "*/*",
@@ -23,14 +23,14 @@
     "domainPrefix": "7lra7r1o0i",
     "http": {
       "method": "POST",
-      "path": "/Dev/posts",
+      "path": "/dev/posts",
       "protocol": "HTTP/1.1",
       "sourceIp": "37.57.69.132",
       "userAgent": "PostmanRuntime/7.26.3"
     },
     "requestId": "R7uHPgi_DoEEJmA=",
     "routeKey": "POST /posts",
-    "stage": "Dev",
+    "stage": "dev",
     "time": "27/Aug/2020:14:31:35 +0000",
     "timeEpoch": 1598538695828
   },

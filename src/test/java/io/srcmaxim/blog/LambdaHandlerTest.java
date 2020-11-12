@@ -2,7 +2,7 @@ package io.srcmaxim.blog;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.amazon.lambda.test.LambdaClient;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -10,6 +10,7 @@ import io.srcmaxim.blog.model.Post;
 import io.srcmaxim.blog.model.PostMeta;
 import io.srcmaxim.blog.repository.CreateDynamoDbTable;
 import io.srcmaxim.blog.repository.DynamoDbLocalResource;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LambdaHandlerTest {
 
+    private static final Logger LOG = Logger.getLogger(BlogLambda.class);
+
     @Inject
-    Gson gson;
+    ObjectMapper objectMapper;
 
     @Inject
     CreateDynamoDbTable createDynamoDbTable;
@@ -47,7 +50,7 @@ class LambdaHandlerTest {
         post.id = null;
         APIGatewayV2HTTPEvent in = new APIGatewayV2HTTPEvent();
         in.setRouteKey("POST /posts");
-        in.setBody(gson.toJson(post));
+        in.setBody(toJson(post));
         APIGatewayV2HTTPResponse out = LambdaClient.invoke(APIGatewayV2HTTPResponse.class, in);
         assertThat(out.getHeaders()).containsEntry("Content-Type", "application/json");
         assertThat(out.getHeaders()).containsEntry("Location", "/posts/" + postId);
@@ -60,7 +63,7 @@ class LambdaHandlerTest {
         in.setRouteKey("PUT /posts/{id}");
         Post post = postOne();
         in.setPathParameters(Map.of("id", post.id));
-        in.setBody(gson.toJson(post));
+        in.setBody(toJson(post));
         APIGatewayV2HTTPResponse out = LambdaClient.invoke(APIGatewayV2HTTPResponse.class, in);
         assertThat(out.getStatusCode()).isEqualTo(204);
         assertThat(out.getHeaders()).containsEntry("Content-Type", "application/json");
@@ -79,7 +82,7 @@ class LambdaHandlerTest {
         String body = out.getBody();
         assertThat(body).isNotNull();
         assertThatJson(body)
-                .isEqualTo(gson.toJson(postOne()));
+                .isEqualTo(toJson(postOne()));
     }
 
     @Test
@@ -94,7 +97,7 @@ class LambdaHandlerTest {
         String body = out.getBody();
         assertThat(body).isNotNull();
         assertThatJson(body)
-                .isEqualTo(gson.toJson(postMetas()));
+                .isEqualTo(toJson(postMetas()));
     }
 
     @Test
@@ -108,7 +111,7 @@ class LambdaHandlerTest {
         String body = out.getBody();
         assertThat(body).isNotNull();
         assertThatJson(body)
-                .isEqualTo(gson.toJson(List.of(postOne(), postTwo())));
+                .isEqualTo(toJson(List.of(postOne(), postTwo())));
     }
 
     @Order(600)
@@ -219,6 +222,15 @@ class LambdaHandlerTest {
         postMetaTwo.tag = "Python";
 
         return List.of(postMetaOne, postMetaTwo);
+    }
+
+    private String toJson(Object data) {
+        try {
+            return objectMapper.writeValueAsString(data);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            return null;
+        }
     }
 
 }

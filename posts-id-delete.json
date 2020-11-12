@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "routeKey": "DELETE /posts/{id}",
-  "rawPath": "/Dev/posts/graalvm-python",
+  "rawPath": "/dev/posts/graalvm-python",
   "rawQueryString": "",
   "headers": {
     "accept": "*/*",
@@ -22,14 +22,14 @@
     "domainPrefix": "7lra7r1o0i",
     "http": {
       "method": "DELETE",
-      "path": "/Dev/posts/graalvm-python",
+      "path": "/dev/posts/graalvm-python",
       "protocol": "HTTP/1.1",
       "sourceIp": "37.57.69.132",
       "userAgent": "PostmanRuntime/7.26.3"
     },
     "requestId": "R7scyg4KjoEEPRw=",
     "routeKey": "DELETE /posts/{id}",
-    "stage": "Dev",
+    "stage": "dev",
     "time": "27/Aug/2020:14:20:14 +0000",
     "timeEpoch": 1598538014544
   },
