@@ -8,12 +8,10 @@ phases:
     commands:
       - export M2_HOME=~/.m2/repository
       - mvn -Pnative clean package -Dmaven.test.skip=true
-  post_build:
-    commands:
-      - mv target/function.zip blog-function.zip
+artifacts:
+  files:
+    - function.zip
+  base-directory: target
 cache:
   paths:
     - '~/.m2/repository/**/*'
-artifacts:
-  files:
-    - blog-function.zip
