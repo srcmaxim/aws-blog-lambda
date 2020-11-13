@@ -4,12 +4,9 @@
 #
 version: 0.2
 phases:
-  install:
-    commands:
-      - export M2_HOME=~/.m2/repository
-      - mvn -B de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies
   build:
     commands:
+      - export M2_HOME=~/.m2/repository
       - mvn -Pnative clean package -Dmaven.test.skip=true
   post_build:
     commands:
