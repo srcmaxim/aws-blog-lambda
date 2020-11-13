@@ -1,0 +1,22 @@
+#
+# Use Bash/PowerShell to debug buildspec commands. Substitute ${PWD} with $(pwd) if you're using Bash:
+# docker run --tty -it -v ${PWD}:/project quay.io/quarkus/centos-quarkus-maven:20.2.0-java11 /bin/bash
+#
+version: 0.2
+phases:
+  install:
+    commands:
+      - export M2_HOME=~/.m2/repository
+      - mvn -B de.qaware.maven:go-offline-maven-plugin:1.2.5:resolve-dependencies
+  build:
+    commands:
+      - mvn -Pnative clean package -Dmaven.test.skip=true
+  post_build:
+    commands:
+      - mv target/function.zip blog-function.zip
+cache:
+  paths:
+    - '~/.m2/repository/**/*'
+artifacts:
+  files:
+    - blog-function.zip
