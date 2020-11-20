@@ -49,6 +49,9 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
             case "GET /meta": {
                 return ok(metaConfiguration.getMeta());
             }
+            case "GET /error": {
+                throw new RuntimeException("Error simulation");
+            }
             case "GET /posts": {
                 List<Post> posts = blogService.getPosts();
                 return ok(posts);
