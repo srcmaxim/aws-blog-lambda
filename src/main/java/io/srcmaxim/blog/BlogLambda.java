@@ -25,6 +25,9 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     BlogService blogService;
 
     @Inject
+    MetaConfiguration metaConfiguration;
+
+    @Inject
     ObjectMapper objectMapper;
 
     @Override
@@ -39,6 +42,13 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     private APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent req) throws Exception {
         String routeKey = req.getRouteKey();
         switch (routeKey) {
+            case "GET /health": {
+                blogService.getPosts();
+                return ok("ok");
+            }
+            case "GET /meta": {
+                return ok(metaConfiguration.getMeta());
+            }
             case "GET /posts": {
                 List<Post> posts = blogService.getPosts();
                 return ok(posts);
@@ -89,7 +99,7 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
         return APIGatewayV2HTTPResponse.builder()
                 .withHeaders(Map.of("Content-Type", "application/json"))
                 .withStatusCode(500)
-                .withBody(toJson(exception.getMessage()))
+                .withBody(toJson(Map.of("error", exception.getMessage())))
                 .build();
     }
 

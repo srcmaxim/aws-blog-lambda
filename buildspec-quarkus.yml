@@ -7,6 +7,8 @@ phases:
   build:
     commands:
       - export M2_HOME=~/.m2/repository
+      - echo meta.build-number=$CODEBUILD_BUILD_NUMBER >> src/main/resources/application.properties
+      - echo meta.source-version=$CODEBUILD_SOURCE_VERSION >> src/main/resources/application.properties
       - mvn -Pnative clean package -Dmaven.test.skip=true
 artifacts:
   files:
