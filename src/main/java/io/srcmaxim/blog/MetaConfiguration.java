@@ -7,9 +7,9 @@ import java.util.Map;
 @ConfigProperties(prefix = "meta")
 public class MetaConfiguration {
 
-    private String buildNumber;
+    public String buildNumber;
 
-    private String sourceVersion;
+    public String sourceVersion;
 
     public Object getMeta() {
         return Map.of("buildNumber", buildNumber, "sourceVersion", sourceVersion);
