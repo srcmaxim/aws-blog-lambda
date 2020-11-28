@@ -159,6 +159,52 @@ class LambdaHandlerTest {
         assertThat(out.getStatusCode()).isEqualTo(404);
     }
 
+    @Test
+    @Order(1000)
+    public void handleRequest_WhenGetHealth_ThenReturnHealth() {
+        APIGatewayV2HTTPEvent in = new APIGatewayV2HTTPEvent();
+        in.setRouteKey("GET /health");
+        in.setPathParameters(Map.of("id", "my-dynamodb-title"));
+        APIGatewayV2HTTPResponse out = LambdaClient.invoke(APIGatewayV2HTTPResponse.class, in);
+        String body = out.getBody();
+        assertThat(body).isNotNull();
+        assertThatJson(body)
+                .isEqualTo(toJson(Map.of(
+                        "status", "UP",
+                        "checks", List.of(Map.of(
+                                "name", "DynamoDB",
+                                "status", "UP"
+                        ))
+                )));
+        assertThat(out.getStatusCode()).isEqualTo(200);
+    }
+
+    @Test
+    @Order(1100)
+    public void handleRequest_WhenGetMeta_ThenReturnMeta() {
+        APIGatewayV2HTTPEvent in = new APIGatewayV2HTTPEvent();
+        in.setRouteKey("GET /meta");
+        APIGatewayV2HTTPResponse out = LambdaClient.invoke(APIGatewayV2HTTPResponse.class, in);
+        String body = out.getBody();
+        assertThat(body).isNotNull();
+        assertThatJson(body)
+                .isEqualTo(toJson(Map.of("buildNumber", "BUILD_NUMBER", "sourceVersion", "SOURCE_VERSION")));
+        assertThat(out.getStatusCode()).isEqualTo(200);
+    }
+
+    @Test
+    @Order(1200)
+    public void handleRequest_WhenGetError_ThenReturnError() {
+        APIGatewayV2HTTPEvent in = new APIGatewayV2HTTPEvent();
+        in.setRouteKey("GET /error");
+        APIGatewayV2HTTPResponse out = LambdaClient.invoke(APIGatewayV2HTTPResponse.class, in);
+        assertThat(out.getStatusCode()).isEqualTo(500);
+        String body = out.getBody();
+        assertThat(body).isNotNull();
+        assertThatJson(body)
+                .isEqualTo(toJson(Map.of("error", "Error simulation")));
+    }
+
     private static Stream<Arguments> providePosts() {
         return Stream.of(
                 Arguments.of(postOne()),

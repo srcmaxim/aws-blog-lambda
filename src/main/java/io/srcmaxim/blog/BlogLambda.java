@@ -5,9 +5,12 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.srcmaxim.blog.config.MetaConfig;
 import io.srcmaxim.blog.model.Post;
 import io.srcmaxim.blog.model.PostMeta;
 import io.srcmaxim.blog.service.BlogService;
+import io.srcmaxim.blog.service.HealthService;
+import io.srcmaxim.blog.service.ResponseService;
 import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
@@ -25,17 +28,23 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
     BlogService blogService;
 
     @Inject
-    MetaConfiguration metaConfiguration;
+    ResponseService responseService;
 
     @Inject
     ObjectMapper objectMapper;
+
+    @Inject
+    HealthService healthService;
+
+    @Inject
+    MetaConfig metaConfig;
 
     @Override
     public APIGatewayV2HTTPResponse handleRequest(APIGatewayV2HTTPEvent req, Context context) {
         try {
             return handleRequest(req);
         } catch (Exception e) {
-            return handleError(e);
+            return responseService.handleError(e);
         }
     }
 
@@ -43,39 +52,44 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
         String routeKey = req.getRouteKey();
         switch (routeKey) {
             case "GET /health": {
-                blogService.getPosts();
-                return ok("ok");
+                Map<String, Object> health = healthService.getHealth();
+                Object data = health.get("data");
+                if (health.get("status").equals(200)) {
+                    return responseService.ok(data);
+                } else {
+                    return responseService.error(data);
+                }
             }
             case "GET /meta": {
-                return ok(metaConfiguration.getMeta());
+                return responseService.ok(metaConfig.getMeta());
             }
             case "GET /error": {
                 throw new RuntimeException("Error simulation");
             }
             case "GET /posts": {
                 List<Post> posts = blogService.getPosts();
-                return ok(posts);
+                return responseService.ok(posts);
             }
             case "GET /posts-meta": {
                 String tag = Optional.ofNullable(req.getQueryStringParameters())
                         .map(pathParameters -> pathParameters.get("tag"))
                         .orElse("");
                 List<PostMeta> postMetaByTag = blogService.getPostMetaByTag(tag);
-                return ok(postMetaByTag);
+                return responseService.ok(postMetaByTag);
             }
             case "GET /posts/{id}": {
                 return Optional.ofNullable(req.getPathParameters())
                         .map(pathParameters -> pathParameters.get("id"))
                         .flatMap(blogService::getPost)
-                        .map(this::ok)
-                        .orElseGet(this::notFound);
+                        .map(responseService::ok)
+                        .orElseGet(responseService::notFound);
             }
             case "DELETE /posts/{id}": {
                 Optional.ofNullable(req.getPathParameters())
                         .map(pathParameters -> pathParameters.get("id"))
                         .flatMap(blogService::getPost)
                         .ifPresent(blogService::deletePost);
-                return noContent();
+                return responseService.noContent();
             }
             case "PUT /posts/{id}":
             case "POST /posts": {
@@ -84,59 +98,10 @@ public class BlogLambda implements RequestHandler<APIGatewayV2HTTPEvent, APIGate
                         .map(pathParameters -> pathParameters.get("id"))
                         .orElse(post.id);
                 blogService.putPost(post);
-                return noContentCreated(post.id);
+                return responseService.noContentCreated(post.id);
             }
         }
         return null;
-    }
-
-    private APIGatewayV2HTTPResponse ok(Object data) {
-        return APIGatewayV2HTTPResponse.builder()
-                .withHeaders(Map.of("Content-Type", "application/json"))
-                .withStatusCode(200)
-                .withBody(toJson(data))
-                .build();
-    }
-
-    private APIGatewayV2HTTPResponse handleError(Exception exception) {
-        return APIGatewayV2HTTPResponse.builder()
-                .withHeaders(Map.of("Content-Type", "application/json"))
-                .withStatusCode(500)
-                .withBody(toJson(Map.of("error", exception.getMessage())))
-                .build();
-    }
-
-    private APIGatewayV2HTTPResponse notFound() {
-        return APIGatewayV2HTTPResponse.builder()
-                .withHeaders(Map.of("Content-Type", "application/json"))
-                .withStatusCode(404)
-                .build();
-    }
-
-    private APIGatewayV2HTTPResponse noContent() {
-        return APIGatewayV2HTTPResponse.builder()
-                .withHeaders(Map.of("Content-Type", "application/json"))
-                .withStatusCode(204)
-                .build();
-    }
-
-    private APIGatewayV2HTTPResponse noContentCreated(String id) {
-        return APIGatewayV2HTTPResponse.builder()
-                .withHeaders(Map.of(
-                        "Content-Type", "application/json",
-                        "Location", "/posts/" + id
-                ))
-                .withStatusCode(204)
-                .build();
-    }
-
-    private String toJson(Object data) {
-        try {
-            return objectMapper.writeValueAsString(data);
-        } catch (Exception e) {
-            LOG.error(e.getMessage());
-            return null;
-        }
     }
 
 }

@@ -1,11 +1,11 @@
-package io.srcmaxim.blog;
+package io.srcmaxim.blog.config;
 
 import io.quarkus.arc.config.ConfigProperties;
 
 import java.util.Map;
 
 @ConfigProperties(prefix = "meta")
-public class MetaConfiguration {
+public class MetaConfig {
 
     public String buildNumber;
 
