@@ -1,0 +1,27 @@
+#
+# Use Bash/PowerShell to debug buildspec commands. Substitute ${PWD} with $(pwd) if you're using Bash:
+# docker run --tty -it -v ${PWD}:/project quay.io/quarkus/centos-quarkus-maven:20.2.0-java11 /bin/bash
+#
+version: 0.2
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to DockerHub...
+      - echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USER --password-stdin
+      - echo Setup Env...
+      - export IMAGE_REPO_NAME=blog-lambda
+      - export IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
+      - echo Setup Meta...
+      - echo meta.build-number=$CODEBUILD_BUILD_NUMBER >> src/main/resources/application.properties
+      - echo meta.source-version=$CODEBUILD_SOURCE_VERSION >> src/main/resources/application.properties
+  build:
+    commands:
+      - echo Build started on date
+      - echo Building the Docker image...
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKERHUB_USER/$IMAGE_REPO_NAME:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on date
+      - echo Pushing the Docker image...
+      - docker push $DOCKERHUB_USER/$IMAGE_REPO_NAME:$IMAGE_TAG
