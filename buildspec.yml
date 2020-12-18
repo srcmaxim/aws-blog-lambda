@@ -7,7 +7,7 @@ phases:
   pre_build:
     commands:
       - echo Logging in to DockerHub...
-      - echo $DOCKERHUB_TOKEN | docker login --username $DOCKERHUB_USER --password-stdin
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
       - echo Setup Env...
       - export IMAGE_REPO_NAME=blog-lambda
       - export IMAGE_TAG=$CODEBUILD_BUILD_NUMBER
@@ -16,12 +16,12 @@ phases:
       - echo meta.source-version=$CODEBUILD_SOURCE_VERSION >> src/main/resources/application.properties
   build:
     commands:
-      - echo Build started on date
+      - echo Build started on `date`
       - echo Building the Docker image...
       - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
-      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $DOCKERHUB_USER/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
-      - echo Build completed on date
+      - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push $DOCKERHUB_USER/$IMAGE_REPO_NAME:$IMAGE_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG

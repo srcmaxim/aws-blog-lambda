@@ -2,10 +2,10 @@ FROM quay.io/quarkus/centos-quarkus-maven:20.2.0-java11 as build
 WORKDIR /project
 # Download dependencies
 COPY pom.xml .
-RUN mvn dependency:go-offline
+RUN mvn -ntp dependency:go-offline
 # Build app
 COPY src/ /project/src/
-RUN mvn clean install -Pnative -DskipTests=true
+RUN mvn -ntp clean install -Pnative -DskipTests=true
 
 FROM public.ecr.aws/lambda/provided:al2 AS runtime
 # Copy custom runtime bootstrap
